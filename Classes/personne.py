@@ -1,8 +1,13 @@
 import sys
 from PyQt5.QtWidgets import (QFormLayout, QLabel, QGridLayout, QLineEdit,
-        QGroupBox, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox)
+        QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox)
 
 class Personne(QDialog):
+    nom = ''
+    prenom = ''
+    status = ''
+    statusList = ['Eleve', 'Professeur']
+
     def __init__(self, personnes):
         super(Personne, self).__init__()
 
@@ -10,11 +15,6 @@ class Personne(QDialog):
         self.firstnameLineEdit = QLineEdit()
         self.statusBox = QComboBox()
         self.personnes = personnes
-
-        self.nom = self.lastnameLineEdit.text()
-        self.prenom = self.firstnameLineEdit.text()
-        self.status = self.statusBox.currentText()
-        self.statusList = ['Eleve', 'Professeur']
 
         self.createFormGroupBox()
 
@@ -28,6 +28,9 @@ class Personne(QDialog):
         self.setLayout(mainLayout)
 
     def validate(self):
+        self.nom = self.lastnameLineEdit.text()
+        self.prenom = self.firstnameLineEdit.text()
+        self.status = self.statusBox.currentText()
         self.personnes.add(self)
         self.close()
 
@@ -39,12 +42,12 @@ class Personne(QDialog):
 
     def createFormGroupBox(self):
         self.formGroupBox = QGroupBox("Ajouter une personne")
-        liste = QComboBox()
+        liste = self.statusBox
         liste.addItems(self.statusList)
 
         layout = QFormLayout()
-        layout.addRow(QLabel("Nom: "), QLineEdit())
-        layout.addRow(QLabel("Prénom: "), QLineEdit())
+        layout.addRow(QLabel("Nom: "), self.lastnameLineEdit)
+        layout.addRow(QLabel("Prénom: "), self.firstnameLineEdit)
         layout.addRow(QLabel("Statut : "), liste)
         self.formGroupBox.setLayout(layout)
         self.setWindowTitle("Ajouter")
@@ -52,14 +55,28 @@ class Personne(QDialog):
 class Personnes():
     def __init__(self):
         self.listePersonnes = []
+        self.widget = QListWidget()
+
+    def debugListe(self):
+        print("Liste des personnes : ")
+        for item in self.listePersonnes:
+            print(item.nom + " " + item.prenom)
 
     def add(self, personne):
         self.listePersonnes.append(personne)
+        self.widget.addItem(personne.nom + ' ' + personne.prenom + ' (' + personne.status + ')')
+        self.debugListe()
+
+    def getList(self):
+        return self.listePersonnes
 
     def displayPersonnes(self):
         self.listeGroupBox = QGroupBox("Personnes")
         layout = QVBoxLayout()
-        for item in self.listePersonnes:
-            layout.addWidget(QLabel("%s %s" % (item.getLastname(), item.getFirstname())))
+        layout.addWidget(self.widget)
         self.listeGroupBox.setLayout(layout)
         return self.listeGroupBox
+
+    def displayPersonnes2(self):
+        return self.widget
+        
