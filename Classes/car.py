@@ -1,6 +1,8 @@
 import json
 import requests
-from PyQt5.QtWidgets import QVBoxLayout, QLabel, QGroupBox, QProgressBar
+from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, QProgressBar
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtCore import *
 
 
 class Car:
@@ -30,15 +32,17 @@ class Car:
     def displayCar(self):
         # Layout Car
         layoutCar = QVBoxLayout()
+        hLayoutCar = QHBoxLayout()
         carGroup = QGroupBox("Car")
         progress = QProgressBar()
         progress.setGeometry(0, 0, 300, 15)
         progress.setMaximum(self.nb_places_max)
         progress.setValue(len(self.personnes))
+        progress.setOrientation(QtCore.Qt.Vertical) 
         layoutCar.addWidget(QLabel("Nombre d'élèves : %d" % (len(self.eleves))))
         layoutCar.addWidget(QLabel("Nombre de professeurs : %d" % (len(self.prof))))
         layoutCar.addWidget(QLabel("Ratio : %.1f" % (self.getRatio())))
-        layoutCar.addWidget(QLabel("Remplissage : "))
-        layoutCar.addWidget(progress)
-        carGroup.setLayout(layoutCar)
+        hLayoutCar.addLayout(layoutCar)
+        hLayoutCar.addWidget(progress)
+        carGroup.setLayout(hLayoutCar)
         return carGroup

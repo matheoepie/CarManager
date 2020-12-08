@@ -1,16 +1,16 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, QFormLayout, QLineEdit, QComboBox, QSpinBox
 from PyQt5 import QtCore
-from classes.meteo import Meteo
-from classes.personne import (Personne, Personnes)
-from classes.car import Car
+from Classes.meteo import Meteo
+from Classes.personne import (Personne, Personnes)
+from Classes.car import Car
 
 meteo = Meteo()
 car = Car()
 listePersonnes = Personnes()
 
-def getPersonnesListe():
-    return listePersonnes
+def addMember():
+    Personne(listePersonnes).exec_()
 
 if __name__ == '__main__':
 
@@ -23,6 +23,8 @@ if __name__ == '__main__':
     w.setWindowTitle('Car Manager')
 
     layout = QVBoxLayout()
+    layout2 = QVBoxLayout()
+    hLayout = QHBoxLayout()
     layoutBoutons = QHBoxLayout()
 
     label = QLabel("")
@@ -30,21 +32,26 @@ if __name__ == '__main__':
     previous = QPushButton("Supprimer un car")
     next = QPushButton("Ajouter un car")
     newMember = QPushButton("Ajouter une personne")
+    newMember.clicked.connect(addMember)
 
     layoutBoutons.addWidget(previous)
     layoutBoutons.addWidget(next)
-    layoutBoutons.addWidget(newMember)
 
     layout.addWidget(meteo.displayMeteo())
     layout.addWidget(car.displayCar())
     layout.addLayout(layoutBoutons)
+    layout2.addWidget(listePersonnes.displayPersonnes())
+    layout2.addWidget(newMember)
+
+    hLayout.addLayout(layout)
+    hLayout.addLayout(layout2)
 
     # Update label every 10ms
     timer = QtCore.QTimer()
-    #timer.timeout.connect(update_labels)
+    #timer.timeout.connect(updateListe)
     timer.start(10)
 
-    w.setLayout(layout)
+    w.setLayout(hLayout)
     w.show()
 
     app.exec_()
