@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from Classes.meteo import Meteo
 from Classes.personne import (Personne, Personnes)
 from Classes.car import Car
+from Classes.classe import (Classe, Classes)
 
 class MainUI(QApplication):
     def __init__(self):
@@ -13,6 +14,7 @@ class MainUI(QApplication):
         self.car = Car()
         self.listePersonnes = Personnes()
         self.afficher_liste = PersonnesWidget(self.listePersonnes)
+        self.listeClasses = Classes()
 
         self.widget = QWidget()
 
@@ -31,6 +33,8 @@ class MainUI(QApplication):
         self.next = QPushButton("Ajouter un car")
         self.newMember = QPushButton("Ajouter une personne")
         self.newMember.clicked.connect(self.addMember)
+        self.newClass = QPushButton("Ajouter une classe")
+        self.newClass.clicked.connect(self.addClass)
 
         self.layoutBoutons.addWidget(self.previous)
         self.layoutBoutons.addWidget(self.next)
@@ -38,8 +42,10 @@ class MainUI(QApplication):
         self.layout.addWidget(self.meteo.displayMeteo())
         self.layout.addWidget(self.car.displayCar())
         self.layout.addLayout(self.layoutBoutons)
+          
         self.layout2.addWidget(self.afficher_liste)
         self.layout2.addWidget(self.newMember)
+        self.layout2.addWidget(self.newClass)
 
         self.hLayout.addLayout(self.layout)
         self.hLayout.addLayout(self.layout2)
@@ -49,7 +55,10 @@ class MainUI(QApplication):
         self.afficher_liste.show()
 
     def addMember(self):
-        Personne(self.listePersonnes).exec_()
+        Personne(self.listePersonnes, self.listeClasses).exec_()
+        
+    def addClass(self):
+        Classe(self.listeClasses).exec_()
 
 class PersonnesWidget(QWidget):
     def __init__(self, listePersonnes):

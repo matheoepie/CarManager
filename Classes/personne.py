@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import (QFormLayout, QLabel, QGridLayout, QLineEdit,
-        QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox)
+from PyQt5.QtWidgets import (QFormLayout, QLabel, QGridLayout, QLineEdit, QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox)
+from Classes.classe import Classes
 
 class Personne(QDialog):
     nom = ''
@@ -8,13 +8,15 @@ class Personne(QDialog):
     status = ''
     statusList = ['Eleve', 'Professeur']
 
-    def __init__(self, personnes):
+    def __init__(self, personnes, classes):
         super(Personne, self).__init__()
 
         self.lastnameLineEdit = QLineEdit()
         self.firstnameLineEdit = QLineEdit()
         self.statusBox = QComboBox()
+        self.classBox = QComboBox()
         self.personnes = personnes
+        self.classes = classes.listClasses
 
         self.createFormGroupBox()
 
@@ -31,6 +33,7 @@ class Personne(QDialog):
         self.nom = self.lastnameLineEdit.text()
         self.prenom = self.firstnameLineEdit.text()
         self.status = self.statusBox.currentText()
+        self.classe = self.classBox.currentText()
         self.personnes.add(self)
         self.close()
 
@@ -44,11 +47,14 @@ class Personne(QDialog):
         self.formGroupBox = QGroupBox("Ajouter une personne")
         liste = self.statusBox
         liste.addItems(self.statusList)
+        listeClass = QComboBox()
+        listeClass.addItems(self.classes)
 
         layout = QFormLayout()
         layout.addRow(QLabel("Nom: "), self.lastnameLineEdit)
         layout.addRow(QLabel("Prénom: "), self.firstnameLineEdit)
         layout.addRow(QLabel("Statut : "), liste)
+        layout.addRow(QLabel("Classe : "), listeClass)
         self.formGroupBox.setLayout(layout)
         self.setWindowTitle("Ajouter")
 
@@ -64,7 +70,7 @@ class Personnes():
 
     def add(self, personne):
         self.listePersonnes.append(personne)
-        self.widget.addItem(personne.nom + ' ' + personne.prenom + ' (' + personne.status + ')')
+        self.widget.addItem(personne.nom + ' ' + personne.prenom + ' (' + personne.status + ')'+ personne.classe)
         self.debugListe()
 
     def getList(self):
@@ -77,6 +83,4 @@ class Personnes():
         self.listeGroupBox.setLayout(layout)
         return self.listeGroupBox
 
-    def displayPersonnes2(self):
-        return self.widget
         
