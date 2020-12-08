@@ -1,5 +1,6 @@
 import json
 import requests
+from PyQt5.QtWidgets import QVBoxLayout, QLabel, QGroupBox
 from exceptions import *
 
 class Meteo:
@@ -39,3 +40,16 @@ class Meteo:
 
     def get_tmp(self):
         return [self.tmin, self.tmax]
+
+    def displayMeteo(self):
+        # Layout Météo
+        layoutMeteo = QVBoxLayout()
+        meteoGroup = QGroupBox("Météo")
+        labelMeteo1 = QLabel("Météo sur Marseille : %s" % (self.get_meteo()))
+        labelMeteo2 = QLabel("Température minimale : %d°C" % (self.get_tmp()[0]))
+        labelMeteo3 = QLabel("Température maximale : %d°C" % (self.get_tmp()[1]))
+        layoutMeteo.addWidget(labelMeteo1)
+        layoutMeteo.addWidget(labelMeteo2)
+        layoutMeteo.addWidget(labelMeteo3)
+        meteoGroup.setLayout(layoutMeteo)
+        return meteoGroup
