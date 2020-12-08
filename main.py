@@ -1,7 +1,8 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, QFormLayout, QLineEdit, QComboBox, QSpinBox
 from PyQt5 import QtCore
 from classes import Meteo
+from personne import Personne
 
 meteo = Meteo()
 
@@ -36,6 +37,8 @@ if __name__ == '__main__':
     layout.addWidget(label)
     layout.addLayout(layoutBoutons)
 
+    personne = Personne()
+
     # Update label every 10ms
     timer = QtCore.QTimer()
     timer.timeout.connect(update_labels)
@@ -44,6 +47,5 @@ if __name__ == '__main__':
     w.setLayout(layout)
     w.show()
 
+    sys.exit(personne.exec_())
     app.exec_()
-
-    #sys.exit(app.exec_())
