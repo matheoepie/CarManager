@@ -1,18 +1,17 @@
 import json
 import requests
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, QProgressBar
+from PyQt5.QtWidgets import QVBoxLayout, QScrollArea, QHBoxLayout, QLabel, QGroupBox, QProgressBar, QWidget
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import *
 
 
 class Car:
-    personnes = []
-    eleves = []
-    prof = []
-    nb_places_max = 40
-
     def __init__(self):
-        super()
+        self.personnes = []
+        self.eleves = []
+        self.prof = []
+        self.id = ''
+        self.nb_places_max = 40
 
     def ajouterPersonne(self, personne):
         self.personnes.append(personne)
@@ -38,7 +37,6 @@ class Car:
         progress.setGeometry(0, 0, 300, 15)
         progress.setMaximum(self.nb_places_max)
         progress.setValue(len(self.personnes))
-        progress.setOrientation(QtCore.Qt.Vertical) 
         layoutCar.addWidget(QLabel("Nombre d'élèves : %d" % (len(self.eleves))))
         layoutCar.addWidget(QLabel("Nombre de professeurs : %d" % (len(self.prof))))
         layoutCar.addWidget(QLabel("Ratio : %.1f" % (self.getRatio())))
@@ -46,3 +44,30 @@ class Car:
         hLayoutCar.addWidget(progress)
         carGroup.setLayout(hLayoutCar)
         return carGroup
+
+class Cars:
+    def __init__(self):
+        self.listeCars = []
+        self.widget = QScrollArea()
+
+    def add(self, car):
+        self.listeCars.append(car)
+
+    def displayCars(self):
+        self.listeGroupBox = QGroupBox("Cars")
+        layout = QVBoxLayout()
+        layout.addWidget(self.widget)
+        self.listeGroupBox.setLayout(layout)
+        return self.listeGroupBox
+
+class CarsWidget(QWidget):
+    def __init__(self, listeCars):
+        self.listeCars = listeCars
+        super(CarsWidget, self).__init__()
+        self.afficher_liste = QScrollArea()
+        layout = QVBoxLayout()
+        layout.addWidget(self.afficher_liste)
+        self.setLayout(layout)
+
+    def _trigger_refresh(self):
+        self.update()

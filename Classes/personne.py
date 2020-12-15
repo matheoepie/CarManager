@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import (QFormLayout, QLabel, QGridLayout, QLineEdit,
-        QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox)
+        QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox, QWidget)
 
 class Personne(QDialog):
     nom = ''
@@ -67,6 +67,15 @@ class Personnes():
         self.widget.addItem(personne.nom + ' ' + personne.prenom + ' (' + personne.status + ')')
         self.debugListe()
 
+    def remove(self):
+        selectedItems = self.widget.selectedItems()
+        if not selectedItems:
+            return
+        for item in selectedItems:
+            index = self.widget.row(item)
+            self.widget.takeItem(index)
+            self.listePersonnes.pop(index)
+
     def getList(self):
         return self.listePersonnes
 
@@ -77,6 +86,15 @@ class Personnes():
         self.listeGroupBox.setLayout(layout)
         return self.listeGroupBox
 
-    def displayPersonnes2(self):
-        return self.widget
+class PersonnesWidget(QWidget):
+    def __init__(self, listePersonnes):
+        self.listePersonnes = listePersonnes
+        super(PersonnesWidget, self).__init__()
+        self.afficher_liste = self.listePersonnes.displayPersonnes()
+        layout = QVBoxLayout()
+        layout.addWidget(self.afficher_liste)
+        self.setLayout(layout)
+
+    def _trigger_refresh(self):
+        self.update()
         

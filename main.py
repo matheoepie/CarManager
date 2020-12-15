@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, QFormLayout, QLineEdit, QComboBox, QSpinBox
 from PyQt5 import QtCore
 from Classes.meteo import Meteo
-from Classes.personne import (Personne, Personnes)
+from Classes.personne import (Personne, Personnes, PersonnesWidget)
 from Classes.car import Car
 
 class MainUI(QApplication):
@@ -22,6 +22,7 @@ class MainUI(QApplication):
 
         self.layout = QVBoxLayout()
         self.layout2 = QVBoxLayout()
+        self.layout3 = QHBoxLayout()
         self.hLayout = QHBoxLayout()
         self.layoutBoutons = QHBoxLayout()
 
@@ -30,7 +31,9 @@ class MainUI(QApplication):
         self.previous = QPushButton("Supprimer un car")
         self.next = QPushButton("Ajouter un car")
         self.newMember = QPushButton("Ajouter une personne")
+        self.removeMember = QPushButton("Retirer une personne")
         self.newMember.clicked.connect(self.addMember)
+        self.removeMember.clicked.connect(self.deleteMember)
 
         self.layoutBoutons.addWidget(self.previous)
         self.layoutBoutons.addWidget(self.next)
@@ -39,8 +42,10 @@ class MainUI(QApplication):
         self.layout.addWidget(self.car.displayCar())
         self.layout.addLayout(self.layoutBoutons)
         self.layout2.addWidget(self.afficher_liste)
-        self.layout2.addWidget(self.newMember)
+        self.layout3.addWidget(self.newMember)
+        self.layout3.addWidget(self.removeMember)
 
+        self.layout2.addLayout(self.layout3)
         self.hLayout.addLayout(self.layout)
         self.hLayout.addLayout(self.layout2)
 
@@ -51,17 +56,8 @@ class MainUI(QApplication):
     def addMember(self):
         Personne(self.listePersonnes).exec_()
 
-class PersonnesWidget(QWidget):
-    def __init__(self, listePersonnes):
-        self.listePersonnes = listePersonnes
-        super(PersonnesWidget, self).__init__()
-        self.afficher_liste = self.listePersonnes.displayPersonnes()
-        layout = QVBoxLayout()
-        layout.addWidget(self.afficher_liste)
-        self.setLayout(layout)
-
-    def _trigger_refresh(self):
-        self.update()
+    def deleteMember(self):
+        self.listePersonnes.remove()
 
 if __name__ == '__main__':
     app = MainUI()
