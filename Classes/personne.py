@@ -1,11 +1,6 @@
 import sys
-<<<<<<< HEAD
-from PyQt5.QtWidgets import (QFormLayout, QLabel, QGridLayout, QLineEdit,
-        QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox, QWidget)
-=======
-from PyQt5.QtWidgets import (QFormLayout, QLabel, QGridLayout, QLineEdit, QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox)
+from PyQt5.QtWidgets import (QFormLayout, QLabel, QGridLayout, QLineEdit, QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox, QWidget)
 from Classes.classe import Classes
->>>>>>> 5d692bf99716b5dffebbc60eb6135e6ec34b0c6f
 
 class Personne(QDialog):
     nom = ''
@@ -97,7 +92,6 @@ class Personnes():
         self.listeGroupBox.setLayout(layout)
         return self.listeGroupBox
 
-<<<<<<< HEAD
 class PersonnesWidget(QWidget):
     def __init__(self, listePersonnes):
         self.listePersonnes = listePersonnes
@@ -109,6 +103,3 @@ class PersonnesWidget(QWidget):
 
     def _trigger_refresh(self):
         self.update()
-=======
->>>>>>> 5d692bf99716b5dffebbc60eb6135e6ec34b0c6f
-        

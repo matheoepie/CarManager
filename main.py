@@ -35,12 +35,9 @@ class MainUI(QApplication):
         self.newMember = QPushButton("Ajouter une personne")
         self.removeMember = QPushButton("Retirer une personne")
         self.newMember.clicked.connect(self.addMember)
-<<<<<<< HEAD
         self.removeMember.clicked.connect(self.deleteMember)
-=======
         self.newClass = QPushButton("Ajouter une classe")
         self.newClass.clicked.connect(self.addClass)
->>>>>>> 5d692bf99716b5dffebbc60eb6135e6ec34b0c6f
 
         self.layoutBoutons.addWidget(self.previous)
         self.layoutBoutons.addWidget(self.next)
@@ -50,13 +47,10 @@ class MainUI(QApplication):
         self.layout.addLayout(self.layoutBoutons)
           
         self.layout2.addWidget(self.afficher_liste)
-<<<<<<< HEAD
         self.layout3.addWidget(self.newMember)
         self.layout3.addWidget(self.removeMember)
-=======
         self.layout2.addWidget(self.newMember)
         self.layout2.addWidget(self.newClass)
->>>>>>> 5d692bf99716b5dffebbc60eb6135e6ec34b0c6f
 
         self.layout2.addLayout(self.layout3)
         self.hLayout.addLayout(self.layout)
