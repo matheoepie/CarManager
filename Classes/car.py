@@ -1,6 +1,6 @@
 import json
 import requests
-from PyQt5.QtWidgets import QVBoxLayout, QScrollArea, QHBoxLayout, QLabel, QGroupBox, QProgressBar, QWidget
+from PyQt5.QtWidgets import QVBoxLayout, QListWidget, QHBoxLayout, QLabel, QGroupBox, QProgressBar, QWidget
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import *
 
@@ -45,13 +45,28 @@ class Car:
         carGroup.setLayout(hLayoutCar)
         return carGroup
 
-class Cars:
+class Cars():
     def __init__(self):
         self.listeCars = []
-        self.widget = QScrollArea()
+        self.widget = QListWidget()
+        
+    def debugListe(self):
+        print("Liste des cars : ")
+        for item in self.listeCars:
+            print(item.id)
 
     def add(self, car):
         self.listeCars.append(car)
+        self.debugListe()
+        
+    def remove(self):
+        selectedItems = self.widget.selectedItems()
+        if not selectedItems:
+            return
+        for item in selectedItems:
+            index = self.widget.row(item)
+            self.widget.takeItem(index)
+            self.listeCars.pop(index)
 
     def displayCars(self):
         self.listeGroupBox = QGroupBox("Cars")
@@ -64,10 +79,13 @@ class CarsWidget(QWidget):
     def __init__(self, listeCars):
         self.listeCars = listeCars
         super(CarsWidget, self).__init__()
-        self.afficher_liste = QScrollArea()
+        self.afficher_liste = QListWidget()
         layout = QVBoxLayout()
         layout.addWidget(self.afficher_liste)
         self.setLayout(layout)
 
     def _trigger_refresh(self):
         self.update()
+        
+
+        
