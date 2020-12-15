@@ -34,9 +34,9 @@ class MainUI(QApplication):
         self.next = QPushButton("Ajouter un car")
         self.newMember = QPushButton("Ajouter une personne")
         self.removeMember = QPushButton("Retirer une personne")
+        self.newClass = QPushButton("Ajouter une classe")
         self.newMember.clicked.connect(self.addMember)
         self.removeMember.clicked.connect(self.deleteMember)
-        self.newClass = QPushButton("Ajouter une classe")
         self.newClass.clicked.connect(self.addClass)
 
         self.layoutBoutons.addWidget(self.previous)
@@ -49,7 +49,6 @@ class MainUI(QApplication):
         self.layout2.addWidget(self.afficher_liste)
         self.layout3.addWidget(self.newMember)
         self.layout3.addWidget(self.removeMember)
-        self.layout2.addWidget(self.newMember)
         self.layout2.addWidget(self.newClass)
 
         self.layout2.addLayout(self.layout3)
