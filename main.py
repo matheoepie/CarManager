@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from Classes.meteo import Meteo
 from Classes.personne import (Personne, Personnes, PersonnesWidget)
 from Classes.car import Car
+from Classes.classe import (Classe, Classes)
 
 class MainUI(QApplication):
     def __init__(self):
@@ -13,6 +14,7 @@ class MainUI(QApplication):
         self.car = Car()
         self.listePersonnes = Personnes()
         self.afficher_liste = PersonnesWidget(self.listePersonnes)
+        self.listeClasses = Classes()
 
         self.widget = QWidget()
 
@@ -33,7 +35,12 @@ class MainUI(QApplication):
         self.newMember = QPushButton("Ajouter une personne")
         self.removeMember = QPushButton("Retirer une personne")
         self.newMember.clicked.connect(self.addMember)
+<<<<<<< HEAD
         self.removeMember.clicked.connect(self.deleteMember)
+=======
+        self.newClass = QPushButton("Ajouter une classe")
+        self.newClass.clicked.connect(self.addClass)
+>>>>>>> 5d692bf99716b5dffebbc60eb6135e6ec34b0c6f
 
         self.layoutBoutons.addWidget(self.previous)
         self.layoutBoutons.addWidget(self.next)
@@ -41,9 +48,15 @@ class MainUI(QApplication):
         self.layout.addWidget(self.meteo.displayMeteo())
         self.layout.addWidget(self.car.displayCar())
         self.layout.addLayout(self.layoutBoutons)
+          
         self.layout2.addWidget(self.afficher_liste)
+<<<<<<< HEAD
         self.layout3.addWidget(self.newMember)
         self.layout3.addWidget(self.removeMember)
+=======
+        self.layout2.addWidget(self.newMember)
+        self.layout2.addWidget(self.newClass)
+>>>>>>> 5d692bf99716b5dffebbc60eb6135e6ec34b0c6f
 
         self.layout2.addLayout(self.layout3)
         self.hLayout.addLayout(self.layout)
@@ -54,7 +67,10 @@ class MainUI(QApplication):
         self.afficher_liste.show()
 
     def addMember(self):
-        Personne(self.listePersonnes).exec_()
+        Personne(self.listePersonnes, self.listeClasses).exec_()
+        
+    def addClass(self):
+        Classe(self.listeClasses).exec_()
 
     def deleteMember(self):
         self.listePersonnes.remove()
