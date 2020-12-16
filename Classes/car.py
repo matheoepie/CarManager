@@ -1,6 +1,6 @@
 import json
 import requests
-from PyQt5.QtWidgets import QVBoxLayout, QListWidget, QHBoxLayout, QLabel, QGroupBox, QProgressBar, QWidget, QTreeWidget, QTreeView, QTreeWidgetItem
+from PyQt5.QtWidgets import QVBoxLayout, QListWidget, QDialogButtonBox, QDialog, QComboBox, QHBoxLayout, QLabel, QGroupBox, QProgressBar, QWidget, QTreeWidget, QTreeView, QTreeWidgetItem
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from collections import deque
 from PyQt5 import QtCore, QtGui
@@ -11,6 +11,7 @@ class Car:
         self.personnes = []
         self.eleves = ["Test"]
         self.prof = []
+        self.name = "Car n°"
         self.id = id
         self.nb_places_max = 40
         self.widget = QListWidget()
@@ -56,6 +57,13 @@ class Car:
         self.listeGroupBox.setLayout(layout)
         print("End - Display of car")
         return self.listeGroupBox
+    
+    def displayAppel(self):
+        self.listeGroupBox = QGroupBox("Appel")
+        layout = QVBoxLayout()
+        layout.addWidget(self.widget)
+        self.listeGroupBox.setLayout(layout)
+        return self.listeGroupBox
 
 class Cars():
     def __init__(self):
@@ -70,10 +78,13 @@ class Cars():
     def add(self):
         if (len(self.listeCars) > 0):
             id = self.listeCars[len(self.listeCars)-1].id+1
-            self.widget.addItem("Car n°%d" % id)
+            car = Car(id)
+            self.listeCars.append(car)
+            self.widget.addItem(str(car.id))
         else:
             id = 0
-        self.listeCars.append(Car(id))
+            self.listeCars.append(Car(id))
+        
         self.debugListe()
         
     def remove(self):
@@ -84,6 +95,13 @@ class Cars():
             index = self.widget.row(item)
             self.widget.takeItem(index)
             self.listeCars.pop(index)
+            
+    def getCombo(self):
+        selectedItems = self.widget.selectedItems()
+        if not selectedItems:
+            return
+        else:
+            return selectedItems[0]
 
     def displayCars(self):
         self.listeGroupBox = QGroupBox("Cars")
@@ -91,6 +109,8 @@ class Cars():
         layout.addWidget(self.widget)
         self.listeGroupBox.setLayout(layout)
         return self.listeGroupBox
+    
+
 
 class CarsWidget(QWidget):
     def __init__(self, listeCars):
@@ -125,3 +145,18 @@ class CarsWidget(QWidget):
 
     def _trigger_refresh(self):
         self.update()
+        
+class Appel(QDialog):
+    def __init__(self, Car):
+        self.list = Car
+        super(Appel, self).__init__()
+        self.afficher_liste = self.list.displayAppel()
+        layout = QVBoxLayout()
+        layout.addWidget(self.afficher_liste)
+        
+        
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        layout = QVBoxLayout()
+        layout.addWidget(buttonBox)
+        self.setLayout(layout)
+        
