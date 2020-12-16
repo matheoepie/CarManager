@@ -1,5 +1,7 @@
 import sys
-from PyQt5.QtWidgets import (QFormLayout, QLabel, QGridLayout, QLineEdit, QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox, QWidget)
+
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import (QFormLayout, QLabel, QGridLayout, QLineEdit, QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox, QWidget, QListWidgetItem)
 from Classes.classe import Classes
 
 class Personne(QDialog):
@@ -62,6 +64,7 @@ class Personnes():
     def __init__(self):
         self.listePersonnes = []
         self.widget = QListWidget()
+        self.widget.itemClicked.connect(self.changeCheck)
 
     def debugListe(self):
         print("Liste des personnes : ")
@@ -70,7 +73,10 @@ class Personnes():
 
     def add(self, personne):
         self.listePersonnes.append(personne)
-        self.widget.addItem(personne.nom + ' ' + personne.prenom + ' (' + personne.status + ')'+ personne.classe)
+        qitem = QListWidgetItem()
+        qitem.setText(personne.nom + ' ' + personne.prenom + ' (' + personne.status + ')'+ personne.classe)
+        qitem.setCheckState(QtCore.Qt.Unchecked)
+        self.widget.addItem(qitem)
         self.debugListe()
 
     def remove(self):
@@ -91,6 +97,12 @@ class Personnes():
         layout.addWidget(self.widget)
         self.listeGroupBox.setLayout(layout)
         return self.listeGroupBox
+
+    def changeCheck(self, qitem):
+        ligne = qitem.listWidget().row(qitem)
+        item = qitem.text()
+        coche = True if qitem.checkState() == QtCore.Qt.Checked else False
+        print("ligne:", ligne, "item:", item, "=>", coche)
 
 class PersonnesWidget(QWidget):
     def __init__(self, listePersonnes):

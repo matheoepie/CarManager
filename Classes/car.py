@@ -1,17 +1,19 @@
 import json
 import requests
-from PyQt5.QtWidgets import QVBoxLayout, QListWidget, QHBoxLayout, QLabel, QGroupBox, QProgressBar, QWidget
+from PyQt5.QtWidgets import QVBoxLayout, QListWidget, QHBoxLayout, QLabel, QGroupBox, QProgressBar, QWidget, QTreeWidget, QTreeView, QTreeWidgetItem
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from collections import deque
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import *
 
 
 class Car:
-    def __init__(self):
+    def __init__(self, id):
         self.personnes = []
-        self.eleves = []
+        self.eleves = ["Test"]
         self.prof = []
-        self.id = ''
+        self.id = id
         self.nb_places_max = 40
+        self.widget = QListWidget()
 
     def ajouterPersonne(self, personne):
         self.personnes.append(personne)
@@ -45,18 +47,33 @@ class Car:
         carGroup.setLayout(hLayoutCar)
         return carGroup
 
+    def displayMembres(self):
+        print("Display of car")
+        self.listeGroupBox = QGroupBox("Car n°%d" % (self.id))
+        self.widget.addItem("%d" % (self.id))
+        layout = QVBoxLayout()
+        layout.addWidget(self.widget)
+        self.listeGroupBox.setLayout(layout)
+        print("End - Display of car")
+        return self.listeGroupBox
+
 class Cars():
     def __init__(self):
         self.listeCars = []
         self.widget = QListWidget()
-        
+
     def debugListe(self):
         print("Liste des cars : ")
         for item in self.listeCars:
             print(item.id)
 
-    def add(self, car):
-        self.listeCars.append(car)
+    def add(self):
+        if (len(self.listeCars) > 0):
+            id = self.listeCars[len(self.listeCars)-1].id+1
+            self.widget.addItem("Car n°%d" % id)
+        else:
+            id = 0
+        self.listeCars.append(Car(id))
         self.debugListe()
         
     def remove(self):
@@ -77,15 +94,34 @@ class Cars():
 
 class CarsWidget(QWidget):
     def __init__(self, listeCars):
-        self.listeCars = listeCars
+        self.id = 0
+        self.listeCarsTotal = listeCars
+        self.listeCarsTotal.add()
         super(CarsWidget, self).__init__()
-        self.afficher_liste = QListWidget()
+        print(len(self.listeCarsTotal.listeCars))
+        if (len(self.listeCarsTotal.listeCars) > 0):
+            self.afficher_liste = self.listeCarsTotal.displayCars()
         layout = QVBoxLayout()
+        #if (len(self.listeCarsTotal.listeCars) > 0):
         layout.addWidget(self.afficher_liste)
         self.setLayout(layout)
 
+    def next(self):
+        if (self.id == 0 and len(self.listeCarsTotal.listeCars) > 0):
+            self.id = 1
+            print(self.id)
+        elif (self.id < len(self.listeCarsTotal.listeCars)-1):
+            self.id = self.id + 1
+            print(self.id)
+        else:
+            return
+
+    def previous(self):
+        if (self.id > 0):
+            self.id = self.id - 1
+            print(self.id)
+        else:
+            return
+
     def _trigger_refresh(self):
         self.update()
-        
-
-        
