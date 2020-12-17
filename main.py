@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHB
 from PyQt5 import QtCore
 from Classes.meteo import Meteo
 from Classes.personne import (Personne, Personnes, PersonnesWidget)
-from Classes.car import (Car, Cars, CarsWidget)
+from Classes.car import (Car, Cars, CarsWidget, Appel)
 from Classes.classe import (Classe, Classes)
 
 class MainUI(QApplication):
@@ -18,6 +18,7 @@ class MainUI(QApplication):
         self.listeClasses = Classes()
         self.errors = []
 
+
         self.widget = QWidget()
 
         self.widget.resize(500, 120)
@@ -29,6 +30,7 @@ class MainUI(QApplication):
         self.layout3 = QHBoxLayout()
         self.layout4 = QHBoxLayout()
         self.layout5 = QVBoxLayout()
+        self.layout6 = QVBoxLayout()
         self.hLayout = QHBoxLayout()
         self.vLayout = QVBoxLayout()
         self.layoutBoutons = QHBoxLayout()
@@ -37,14 +39,19 @@ class MainUI(QApplication):
         self.label.setWordWrap(True)
         self.previous = QPushButton("Car précédent")
         self.next = QPushButton("Car suivant")
+        self.appel = QPushButton("Faire l'appel")
         self.newCar = QPushButton("Ajouter un car")
         self.removeCar = QPushButton("Supprimer un car")
         self.newMember = QPushButton("Ajouter une personne")
         self.removeMember = QPushButton("Retirer une personne")
         self.newClass = QPushButton("Ajouter une classe")
         self.validateButton = QPushButton("Valider")
+        self.moveToCar = QPushButton("Assigner à un car")
+        
+        self.moveToCar.clicked.connect(self.personMoveToCar)
         self.newCar.clicked.connect(self.addCar)
         #self.removeCar.clicked.connect(self.deleteCar)
+        self.appel.clicked.connect(self.carAppel)
         self.next.clicked.connect(self.nextCar)
         self.previous.clicked.connect(self.previousCar)
         self.newMember.clicked.connect(self.addMember)
@@ -54,6 +61,7 @@ class MainUI(QApplication):
         self.layout5.addWidget(self.afficher_cars)
         self.layout4.addWidget(self.previous)
         self.layout4.addWidget(self.next)
+        self.layout5.addWidget(self.appel)
         self.layout5.addLayout(self.layout4)
         self.layoutBoutons.addWidget(self.newCar)
         self.layoutBoutons.addWidget(self.removeCar)
@@ -65,11 +73,15 @@ class MainUI(QApplication):
         self.layout3.addWidget(self.newMember)
         self.layout3.addWidget(self.removeMember)
         self.layout2.addWidget(self.newClass)
+        self.layout2.addWidget(self.moveToCar)
+        
+
 
         self.layout2.addLayout(self.layout3)
         self.hLayout.addLayout(self.layout)
         self.hLayout.addLayout(self.layout5)
         self.hLayout.addLayout(self.layout2)
+        self.hLayout.addLayout(self.layout6)
         self.vLayout.addLayout(self.hLayout)
 
         self.vLayout.addWidget(self.validateButton)
@@ -100,6 +112,23 @@ class MainUI(QApplication):
 
     def deleteMember(self):
         self.listePersonnes.remove()
+    
+    def personMoveToCar(self):
+        result1 = self.listePersonnes.AddPersonToCar()
+        print(result1[0].text())
+        result2 = self.listeCars.getCombo()
+        print(result2.text())
+        for item in result1:
+            self.listeCars.listeCars[int(result2.text())].ajouterPersonne(item)
+    
+    def carAppel(self):
+        result2 = self.listeCars.getCombo()
+        print(result2.text())
+        for item in self.listeCars.listeCars[int(result2.text())].personnes:
+            print(item)
+        target = self.listeCars.listeCars[int(result2.text())]
+        Appel(target).exec_()
+            
 
     def validate(self):
         if len(self.errors) > 0:
