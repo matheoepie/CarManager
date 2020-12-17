@@ -9,7 +9,7 @@ from PyQt5 import QtCore, QtGui
 class Car:
     def __init__(self, id):
         self.personnes = []
-        self.eleves = ["Test"]
+        self.eleves = []
         self.prof = []
         self.name = "Car n°"
         self.id = id
@@ -17,7 +17,8 @@ class Car:
         self.widget = QListWidget()
 
     def ajouterPersonne(self, personne):
-        self.personnes.append(personne)
+        self.personnes.append(personne.text())
+        self.widget.addItem(personne.text())
 
     def ajouterEleve(self, eleve):
         self.eleves.append(eleve)
@@ -147,16 +148,14 @@ class CarsWidget(QWidget):
         self.update()
         
 class Appel(QDialog):
-    def __init__(self, Car):
-        self.list = Car
+    def __init__(self, car):
+        self.list = car
         super(Appel, self).__init__()
         self.afficher_liste = self.list.displayAppel()
         layout = QVBoxLayout()
         layout.addWidget(self.afficher_liste)
         
-        
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        layout = QVBoxLayout()
         layout.addWidget(buttonBox)
         self.setLayout(layout)
         

@@ -109,16 +109,18 @@ class MainUI(QApplication):
     
     def personMoveToCar(self):
         result1 = self.listePersonnes.AddPersonToCar()
-        print(result1)
+        print(result1[0].text())
         result2 = self.listeCars.getCombo()
-        print(result2)
-        listePersCar = Car(result2)
+        print(result2.text())
         for item in result1:
-            listePersCar.ajouterPersonne(item)
+            self.listeCars.listeCars[int(result2.text())].ajouterPersonne(item)
     
     def carAppel(self):
         result2 = self.listeCars.getCombo()
-        target = self.listeCars.listeCars[0]
+        print(result2.text())
+        for item in self.listeCars.listeCars[int(result2.text())].personnes:
+            print(item)
+        target = self.listeCars.listeCars[int(result2.text())]
         Appel(target).exec_()
             
 
