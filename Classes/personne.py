@@ -3,11 +3,13 @@ import sys
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (QFormLayout, QLabel, QGridLayout, QLineEdit, QGroupBox, QListWidget, QDialog, QDialogButtonBox, QVBoxLayout, QComboBox, QWidget, QListWidgetItem)
 from Classes.classe import Classes
+from Classes.car import (Cars, Car)
 
 class Personne(QDialog):
     nom = ''
     prenom = ''
     status = ''
+    classe = ''
     statusList = ['Eleve', 'Professeur']
 
     def __init__(self, personnes, classes):
@@ -87,7 +89,15 @@ class Personnes():
             index = self.widget.row(item)
             self.widget.takeItem(index)
             self.listePersonnes.pop(index)
-
+    
+    def AddPersonToCar(self):
+        selectedItemsPerson = self.widget.selectedItems() 
+        if not selectedItemsPerson:
+            return
+        else:
+            return selectedItemsPerson
+            
+    
     def getList(self):
         return self.listePersonnes
 
