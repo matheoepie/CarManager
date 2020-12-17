@@ -1,6 +1,6 @@
 import json
 import requests
-from PyQt5.QtWidgets import QVBoxLayout, QListWidget, QDialogButtonBox, QDialog, QComboBox, QHBoxLayout, QLabel, QGroupBox, QProgressBar, QWidget, QTreeWidget, QTreeView, QTreeWidgetItem
+from PyQt5.QtWidgets import QVBoxLayout, QListWidget, QMessageBox, QListWidgetItem, QDialogButtonBox, QDialog, QComboBox, QHBoxLayout, QLabel, QGroupBox, QProgressBar, QWidget, QTreeWidget, QTreeView, QTreeWidgetItem
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from collections import deque
 from PyQt5 import QtCore, QtGui
@@ -15,10 +15,15 @@ class Car:
         self.id = id
         self.nb_places_max = 40
         self.widget = QListWidget()
+        self.aFaitAppel = False
 
     def ajouterPersonne(self, personne):
         self.personnes.append(personne.text())
-        self.widget.addItem(personne.text())
+        qitem = QListWidgetItem()
+        qitem.setText(personne.text())
+        qitem.setCheckState(QtCore.Qt.Unchecked)
+        self.widget.addItem(qitem)
+        
 
     def ajouterEleve(self, eleve):
         self.eleves.append(eleve)
@@ -65,6 +70,28 @@ class Car:
         layout.addWidget(self.widget)
         self.listeGroupBox.setLayout(layout)
         return self.listeGroupBox
+    
+    
+    def validate(self):
+        nbabsent = 0
+        items = []
+        for index in range(self.widget.count()):
+            items.append(self.widget.item(index))
+        for item in items:
+            coche = True if item.checkState() == QtCore.Qt.Checked else False
+            if coche == False:
+                nbabsent = nbabsent +1
+        if nbabsent>0:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Erreur")
+            msg.setInformativeText('il ya des absents')
+            msg.setWindowTitle("Erreur")
+            msg.exec_()
+        else:
+            self.aFaitAppel = True
+            self.validate()
+            
 
 class Cars():
     def __init__(self):
@@ -164,6 +191,10 @@ class Appel(QDialog):
         layout.addWidget(self.afficher_liste)
         
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.list.validate)
+        buttonBox.button(QDialogButtonBox.Cancel).clicked.connect(self.reject)
         layout.addWidget(buttonBox)
         self.setLayout(layout)
+
+
         
