@@ -37,8 +37,6 @@ class MainUI(QApplication):
 
         self.label = QLabel("")
         self.label.setWordWrap(True)
-        self.previous = QPushButton("Car précédent")
-        self.next = QPushButton("Car suivant")
         self.appel = QPushButton("Faire l'appel")
         self.newCar = QPushButton("Ajouter un car")
         self.removeCar = QPushButton("Supprimer un car")
@@ -52,15 +50,11 @@ class MainUI(QApplication):
         self.newCar.clicked.connect(self.addCar)
         #self.removeCar.clicked.connect(self.deleteCar)
         self.appel.clicked.connect(self.carAppel)
-        self.next.clicked.connect(self.nextCar)
-        self.previous.clicked.connect(self.previousCar)
         self.newMember.clicked.connect(self.addMember)
         self.removeMember.clicked.connect(self.deleteMember)
         self.newClass.clicked.connect(self.addClass)
         
         self.layout5.addWidget(self.afficher_cars)
-        self.layout4.addWidget(self.previous)
-        self.layout4.addWidget(self.next)
         self.layout5.addWidget(self.appel)
         self.layout5.addLayout(self.layout4)
         self.layoutBoutons.addWidget(self.newCar)
@@ -130,8 +124,7 @@ class MainUI(QApplication):
         Appel(target).exec_()
             
 
-    def validate(self):
-        if len(self.errors) > 0:
+    
 
 
 
