@@ -16,6 +16,7 @@ class MainUI(QApplication):
         self.afficher_liste = PersonnesWidget(self.listePersonnes)
         self.afficher_cars = CarsWidget(self.listeCars)
         self.listeClasses = Classes()
+        self.errors = []
 
         self.widget = QWidget()
 
@@ -29,6 +30,7 @@ class MainUI(QApplication):
         self.layout4 = QHBoxLayout()
         self.layout5 = QVBoxLayout()
         self.hLayout = QHBoxLayout()
+        self.vLayout = QVBoxLayout()
         self.layoutBoutons = QHBoxLayout()
 
         self.label = QLabel("")
@@ -40,6 +42,7 @@ class MainUI(QApplication):
         self.newMember = QPushButton("Ajouter une personne")
         self.removeMember = QPushButton("Retirer une personne")
         self.newClass = QPushButton("Ajouter une classe")
+        self.validateButton = QPushButton("Valider")
         self.newCar.clicked.connect(self.addCar)
         #self.removeCar.clicked.connect(self.deleteCar)
         self.next.clicked.connect(self.nextCar)
@@ -67,9 +70,11 @@ class MainUI(QApplication):
         self.hLayout.addLayout(self.layout)
         self.hLayout.addLayout(self.layout5)
         self.hLayout.addLayout(self.layout2)
-  
+        self.vLayout.addLayout(self.hLayout)
 
-        self.widget.setLayout(self.hLayout)
+        self.vLayout.addWidget(self.validateButton)
+
+        self.widget.setLayout(self.vLayout)
         self.widget.show()
         self.afficher_liste.show()
 
@@ -95,6 +100,11 @@ class MainUI(QApplication):
 
     def deleteMember(self):
         self.listePersonnes.remove()
+
+    def validate(self):
+        if len(self.errors) > 0:
+
+
 
 if __name__ == '__main__':
     app = MainUI()

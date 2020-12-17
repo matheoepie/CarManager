@@ -85,6 +85,14 @@ class Cars():
             self.widget.takeItem(index)
             self.listeCars.pop(index)
 
+    def isOneEmpty(self):
+        result = False
+        for car in self.listeCars:
+            if car.personnes == 0:
+                result = True
+                break
+        return True
+
     def displayCars(self):
         self.listeGroupBox = QGroupBox("Cars")
         layout = QVBoxLayout()
