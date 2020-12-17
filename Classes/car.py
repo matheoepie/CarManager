@@ -90,7 +90,8 @@ class Car:
             msg.exec_()
         else:
             self.aFaitAppel = True
-            self.validate()
+            return True
+            
             
 
 class Cars():
@@ -191,10 +192,12 @@ class Appel(QDialog):
         layout.addWidget(self.afficher_liste)
         
         buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.list.validate)
+        buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.valid)
         buttonBox.button(QDialogButtonBox.Cancel).clicked.connect(self.reject)
         layout.addWidget(buttonBox)
         self.setLayout(layout)
 
-
+    def valid(self):
+        if self.list.validate():
+            self.close()
         
