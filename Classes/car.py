@@ -132,13 +132,53 @@ class Cars():
         else:
             return selectedItems[0]
 
+    def getClasseFromStr(self, pers):
+        index = pers.index(')')
+        return pers[index+1:len(pers)]
+
     def isOneEmpty(self):
         result = False
         for car in self.listeCars:
-            if car.personnes == 0:
-                result = True
-                break
-        return True
+            if car.id != 0:
+                if len(car.personnes) == 0:
+                    result = True
+                    break
+        return result
+
+    def isRatioRespected(self):
+        result = True
+        for car in self.listeCars:
+            for personne in car.personnes:
+                status = personne[len(personne)-6:len(personne)-1]
+                if status == "Eleve":
+                    car.eleves.append(personne)
+                else:
+                    car.prof.append(personne)
+                if len(car.prof) == 0:
+                    result = False
+                else:
+                    if len(car.eleves)/len(car.prof) > 10:
+                        result = False
+        return result
+
+    def hasEveryoneAClass(self, listePers):
+        result = True
+        for personne in listePers.listePersonnes:
+            if personne.status == "Eleve" and personne.classe == '':
+                result = False
+        return result
+
+    def hasTooMuchClasses(self):
+        result = False
+        listClasses = []
+        for car in self.listeCars:
+            for pers in car.personnes:
+                classe = self.getClasseFromStr(pers)
+                if not classe in listClasses:
+                    listClasses.append(classe)
+        if len(listClasses) > 3:
+            result = True
+        return result
 
     def displayCars(self):
         self.listeGroupBox = QGroupBox("Cars")
@@ -183,10 +223,10 @@ class CarsWidget(QWidget):
     def _trigger_refresh(self):
         self.update()
         
-class Appel(QDialog):
+class AppelWidget(QDialog):
     def __init__(self, car):
         self.list = car
-        super(Appel, self).__init__()
+        super(AppelWidget, self).__init__()
         self.afficher_liste = self.list.displayAppel()
         layout = QVBoxLayout()
         layout.addWidget(self.afficher_liste)
@@ -200,4 +240,4 @@ class Appel(QDialog):
     def valid(self):
         if self.list.validate():
             self.close()
-        
+
