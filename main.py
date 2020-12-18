@@ -10,7 +10,7 @@
 
 
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, QFormLayout, QLineEdit, QComboBox, QSpinBox
+from PyQt5.QtWidgets import QApplication, QWidget, QMessageBox, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, QFormLayout, QLineEdit, QComboBox, QSpinBox
 from PyQt5 import QtCore
 from Classes.meteo import Meteo
 from Classes.personne import (Personne, Personnes, PersonnesWidget)
@@ -119,9 +119,16 @@ class MainUI(QApplication):
     def personMoveToCar(self):
         result1 = self.listePersonnes.AddPersonToCar()
         result2 = self.listeCars.getCombo()
-        if not result1 is None and not result2 is None:
-            for item in result1:
+        for item in result1:
+            if len(self.listeCars.listeCars[int(result2.text())].personnes)<self.listeCars.listeCars[int(result2.text())].nb_places_max:
                 self.listeCars.listeCars[int(result2.text())].ajouterPersonne(item)
+            else:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Critical)
+                msg.setText("Erreur")
+                msg.setInformativeText('Un car ne peut pas avoir plus de %s personnes' % self.listeCars.listeCars[int(result2.text())].nb_places_max)
+                msg.setWindowTitle("Erreur")
+                msg.exec_()
     
     def carAppel(self):
         result2 = self.listeCars.getCombo()
