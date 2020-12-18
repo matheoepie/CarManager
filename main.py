@@ -1,9 +1,21 @@
+
+
+#
+#   CAR MANAGER
+#   Application de gestion de remplissage de cars
+#   Développé dans le cadre d'un exercice de Python
+#   Développé par Thibault DOUCET et Mathéo EPIE
+#   B3 DevOPS Classe 2
+#
+
+
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, QFormLayout, QLineEdit, QComboBox, QSpinBox
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, \
+    QFormLayout, QLineEdit, QComboBox, QSpinBox, QMessageBox
 from PyQt5 import QtCore
 from Classes.meteo import Meteo
 from Classes.personne import (Personne, Personnes, PersonnesWidget)
-from Classes.car import (Car, Cars, CarsWidget, Appel)
+from Classes.car import (Car, Cars, CarsWidget, AppelWidget)
 from Classes.classe import (Classe, Classes)
 
 class MainUI(QApplication):
@@ -16,7 +28,6 @@ class MainUI(QApplication):
         self.afficher_liste = PersonnesWidget(self.listePersonnes)
         self.afficher_cars = CarsWidget(self.listeCars)
         self.listeClasses = Classes()
-        self.errors = []
 
 
         self.widget = QWidget()
@@ -37,8 +48,6 @@ class MainUI(QApplication):
 
         self.label = QLabel("")
         self.label.setWordWrap(True)
-        self.previous = QPushButton("Car précédent")
-        self.next = QPushButton("Car suivant")
         self.appel = QPushButton("Faire l'appel")
         self.newCar = QPushButton("Ajouter un car")
         self.removeCar = QPushButton("Supprimer un car")
@@ -52,15 +61,12 @@ class MainUI(QApplication):
         self.newCar.clicked.connect(self.addCar)
         #self.removeCar.clicked.connect(self.deleteCar)
         self.appel.clicked.connect(self.carAppel)
-        self.next.clicked.connect(self.nextCar)
-        self.previous.clicked.connect(self.previousCar)
         self.newMember.clicked.connect(self.addMember)
         self.removeMember.clicked.connect(self.deleteMember)
         self.newClass.clicked.connect(self.addClass)
+        self.validateButton.clicked.connect(self.validate)
         
         self.layout5.addWidget(self.afficher_cars)
-        self.layout4.addWidget(self.previous)
-        self.layout4.addWidget(self.next)
         self.layout5.addWidget(self.appel)
         self.layout5.addLayout(self.layout4)
         self.layoutBoutons.addWidget(self.newCar)
@@ -74,8 +80,6 @@ class MainUI(QApplication):
         self.layout3.addWidget(self.removeMember)
         self.layout2.addWidget(self.newClass)
         self.layout2.addWidget(self.moveToCar)
-        
-
 
         self.layout2.addLayout(self.layout3)
         self.hLayout.addLayout(self.layout)
@@ -115,25 +119,43 @@ class MainUI(QApplication):
     
     def personMoveToCar(self):
         result1 = self.listePersonnes.AddPersonToCar()
-        print(result1[0].text())
         result2 = self.listeCars.getCombo()
-        print(result2.text())
-        for item in result1:
-            self.listeCars.listeCars[int(result2.text())].ajouterPersonne(item)
+        if not result1 is None and not result2 is None:
+            for item in result1:
+                self.listeCars.listeCars[int(result2.text())].ajouterPersonne(item)
     
     def carAppel(self):
         result2 = self.listeCars.getCombo()
-        print(result2.text())
-        for item in self.listeCars.listeCars[int(result2.text())].personnes:
-            print(item)
         target = self.listeCars.listeCars[int(result2.text())]
-        Appel(target).exec_()
-            
+        print("OK")
+        AppelWidget(target).exec_()
 
     def validate(self):
-        if len(self.errors) > 0:
-
-
+        errors = []
+        # Vérifier que tous les cars ont au moins un passager
+        if self.listeCars.isOneEmpty() == True:
+            errors.append("Au moins un car est vide")
+        # Vérifier 1 prof = 10 élèves max
+        if self.listeCars.isRatioRespected() == False:
+            errors.append("Au moins un des cars possède trop d'élèves pour pas suffisamment de profs")
+        # Vérifier que chaque élève a une classe
+        if self.listeCars.hasEveryoneAClass(self.listePersonnes) == False:
+            errors.append("Au moins un élève n'a pas de classe")
+        # Vérifier qu'il n'y a pas plus de 3 classes
+        if self.listeCars.hasTooMuchClasses() == True:
+            errors.append("Il y a plus de 3 classes dans un des cars")
+        for error in errors:
+            print(error)
+        if len(errors) > 0:
+            msg = QMessageBox()
+            errMsg = ''
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Erreur")
+            for message in errors:
+                errMsg = errMsg + '\n' + message
+            msg.setInformativeText(errMsg)
+            msg.setWindowTitle("Erreur")
+            msg.exec_()
 
 if __name__ == '__main__':
     app = MainUI()

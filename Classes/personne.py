@@ -38,6 +38,9 @@ class Personne(QDialog):
         self.prenom = self.firstnameLineEdit.text()
         self.status = self.statusBox.currentText()
         self.classe = self.classBox.currentText()
+        print(self.classe)
+        print(self.classBox.currentText())
+        print(self.statusBox.currentText())
         self.personnes.add(self)
         self.close()
 
@@ -51,7 +54,7 @@ class Personne(QDialog):
         self.formGroupBox = QGroupBox("Ajouter une personne")
         liste = self.statusBox
         liste.addItems(self.statusList)
-        listeClass = QComboBox()
+        listeClass = self.classBox
         listeClass.addItems(self.classes)
 
         layout = QFormLayout()
