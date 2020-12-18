@@ -10,12 +10,11 @@
 
 
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, \
-    QFormLayout, QLineEdit, QComboBox, QSpinBox, QMessageBox
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QGroupBox, QFormLayout, QLineEdit, QComboBox, QSpinBox
 from PyQt5 import QtCore
 from Classes.meteo import Meteo
 from Classes.personne import (Personne, Personnes, PersonnesWidget)
-from Classes.car import (Car, Cars, CarsWidget, AppelWidget)
+from Classes.car import (Car, Cars, CarsWidget, Appel)
 from Classes.classe import (Classe, Classes)
 
 class MainUI(QApplication):
@@ -65,7 +64,7 @@ class MainUI(QApplication):
         self.removeMember.clicked.connect(self.deleteMember)
         self.newClass.clicked.connect(self.addClass)
         self.validateButton.clicked.connect(self.validate)
-        
+
         self.layout5.addWidget(self.afficher_cars)
         self.layout5.addWidget(self.appel)
         self.layout5.addLayout(self.layout4)
