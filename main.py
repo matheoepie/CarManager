@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QMessageBox, QPushButton, QVB
 from PyQt5 import QtCore
 from Classes.meteo import Meteo
 from Classes.personne import (Personne, Personnes, PersonnesWidget)
-from Classes.car import (Car, Cars, CarsWidget, Appel)
+from Classes.car import (Car, Cars, CarsWidget, AppelWidget)
 from Classes.classe import (Classe, Classes)
 
 class MainUI(QApplication):
